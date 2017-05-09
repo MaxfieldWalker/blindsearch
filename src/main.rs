@@ -6,6 +6,8 @@ use std::io::prelude::*;
 
 use regex::Regex;
 
+mod tree;
+
 fn main() {
     let input_path = "./tests/example.txt";
     let file = File::open(input_path).unwrap();
@@ -22,4 +24,14 @@ fn main() {
         // 表示
         println!("{}", first);
     }
+
+    let mut root_node = tree::Node::new("A");
+
+    let c_node = tree::Node::new("c");
+    root_node.add_child(c_node);
+
+    let d_node = tree::Node::new("d");
+    root_node.add_child(d_node);
+
+    root_node.stringify();
 }
