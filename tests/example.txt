@@ -1,0 +1,4 @@
+S -> ab
+a -> cd
+b -> ef
+e -> *gh
