@@ -1,0 +1,6 @@
+[package]
+name = "blindsearch"
+version = "0.1.0"
+authors = ["Maxfield Walker <maxfield.walker@gmail.com>"]
+
+[dependencies]
