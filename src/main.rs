@@ -6,21 +6,17 @@ use std::io::prelude::*;
 
 use regex::Regex;
 
-use std::collections::HashMap;
-use std::collections::hash_map::Entry;
-
 mod tree;
 
-use tree;
+use tree::Node;
 
-// 間違いないだろう
 fn capture<'a>(s: &'a String) -> regex::Captures<'a> {
     let pattern = Regex::new(r"([a-zA-Z])\s+->\s+((\*?[a-zA-Z])+)").unwrap();
     pattern.captures(s).unwrap()
 }
 
 // 1行を与えて、その節点が目標節点かどうかと節点名を返す
-fn getInfo<'a>(line: &'a String) -> (String, Vec<(bool, String)>) {
+fn parse_line<'a>(line: &'a String) -> (String, Vec<(bool, String)>) {
     let captures = capture(line);
     let first = captures.get(1).unwrap().as_str();
     let mut children: Vec<(bool, String)> = vec![];
@@ -51,84 +47,57 @@ fn getInfo<'a>(line: &'a String) -> (String, Vec<(bool, String)>) {
     (first.to_string(), children)
 }
 
-fn f(line: String, root_node: &mut tree::Node, goals: &mut Vec<String>) {
-    let (node_name, children) = getInfo(&line);
+fn build_tree(line: String, root_node: &Node, goals: &mut Vec<String>) {
+    let (node_name, children) = parse_line(&line);
 
-    let samekey: String = node_name.clone();
-
-    // 仮の親ノード
-    // &mut参照する可能性があるのでmutをつける必要がある
-    let mut node = tree::Node::new(samekey.to_string());
-
-
-    // 間違い無し
-    let mut parent_node: &mut tree::Node = match root_node.findNode(&node_name) {
-        Some(n) => {
-
-            // let a: () = n;
-            n
-        }
-        None => {
-            let n: &mut tree::Node = &mut node;
-            n
-        }
+    let parent_node: Node = match root_node.find_node(&node_name) {
+        Some(n) => n,
+        None => Node::new(node_name.clone().to_string()),
     };
-
 
     // ルートノードを取得する方法はまた考えよう
     // ひとまずディクショナリからキーを検索する方法で回避する
 
-    for (isGoalNode, name) in children {
-
-        let samekey: String = name.clone();
-        let child_node = tree::Node::new(samekey.to_string());
+    for (is_goal_node, name) in children {
+        let child_node = Node::new(name.clone().to_string());
 
         // 親ノードに子ノードを追加する
         parent_node.add_child(child_node);
 
-        if isGoalNode {
+        if is_goal_node {
             // ここでnameの所有権が移る
             goals.push(name);
         }
-
     }
 }
 
 fn main() {
-    let root_node = TreeNode::new("Hello".to_string());
+    let input_path = "./tests/example.txt";
+    let file = File::open(input_path).unwrap();
+    let mut reader = BufReader::new(file);
 
-    let a_node = TreeNode::new("a".to_string());
+    // 目標節点を格納する配列
+    let mut goals: Vec<String> = vec![];
 
-    let b_node = TreeNode::new("b".to_string());
+    // 1行目を読む
+    let mut first_line = String::new();
+    let _ = reader.read_line(&mut first_line);
 
-    root_node.add_child(&a_node);
-    root_node.add_child(&b_node);
+    // パースする
+    let (node_name, _) = parse_line(&first_line);
 
-    // root_nodeの型は 'Node<String>'
-    let a: () = root_node;
+    // ルートノードを作成する
+    let root_node = Node::new(node_name);
 
 
-    // let input_path = "./tests/example.txt";
-    // let file = File::open(input_path).unwrap();
-    // let mut reader = BufReader::new(file);
+    build_tree(first_line, &root_node, &mut goals);
 
-    // // 目標節点を格納する配列
-    // let mut goals: Vec<String> = vec![];
+    // 上でread_lineを1回呼んでいるので
+    // 2行目以降がイテレートされる
+    for l in reader.lines() {
+        let line = l.unwrap();
+        build_tree(line, &root_node, &mut goals);
+    }
 
-    // // 1行目を読む
-    // let mut first_line = String::new();
-    // reader.read_line(&mut first_line);
-
-    // // パースする
-    // let (node_name, _) = getInfo(&first_line);
-
-    // // ルートノードを作成する
-    // let mut root_node = tree::Node::new(node_name);
-
-    // f(first_line, &mut root_node, &mut goals);
-
-    // for l in reader.lines() {
-    //     let line = l.unwrap();
-    //     f(line, &mut root_node, &mut goals);
-    // }
+    root_node.stringify();
 }

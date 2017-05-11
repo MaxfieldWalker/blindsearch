@@ -11,10 +11,10 @@ struct _Node {
 
 // NodeRefは単なるタイプエイリアスなので
 // タプル構造体を作ってまったく違う型にしてしまう。
-struct Node(NodeRef);
+pub struct Node(NodeRef);
 
 impl Node {
-    fn new(value: String) -> Node {
+    pub fn new(value: String) -> Node {
         let node = _Node {
             value: value,
             children: vec![],
@@ -22,7 +22,7 @@ impl Node {
         Node(Rc::new(RefCell::new(node)))
     }
 
-    pub fn add_child(&self, child_node: &Node) {
+    pub fn add_child(&self, child_node: Node) {
         // ミュータブルな参照を得る
         // 'self.0' はタプル構造体の1つめの要素を取得している
         // つまり 'self.0' の型は 'Rc<RefCell<Node<T>>>' だが、
@@ -58,7 +58,7 @@ impl Node {
         }
     }
 
-    fn find_node(&self, value: &str) -> Option<Node> {
+    pub fn find_node(&self, value: &str) -> Option<Node> {
         let node_ref = self.0.borrow();
         if node_ref.value == value {
             return Some(Node(self.0.clone()));
