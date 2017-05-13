@@ -6,9 +6,11 @@ use std::io::prelude::*;
 
 use regex::Regex;
 
+mod dfs;
 mod tree;
 
-use tree::Node;
+use tree::*;
+use dfs::*;
 
 fn capture<'a>(s: &'a String) -> regex::Captures<'a> {
     let pattern = Regex::new(r"([a-zA-Z])\s+->\s+((\*?[a-zA-Z])+)").unwrap();
@@ -62,7 +64,7 @@ fn build_tree(line: String, root_node: &Node, goals: &mut Vec<String>) {
         let child_node = Node::new(name.clone().to_string());
 
         // 親ノードに子ノードを追加する
-        parent_node.add_child(child_node);
+        parent_node.add_child(&child_node);
 
         if is_goal_node {
             // ここでnameの所有権が移る

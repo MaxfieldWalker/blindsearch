@@ -6,7 +6,7 @@ type NodeRef = Rc<RefCell<_Node>>;
 #[derive(Debug)]
 struct _Node {
     value: String,
-    children: Vec<NodeRef>,
+    pub children: Vec<NodeRef>,
 }
 
 // NodeRefは単なるタイプエイリアスなので
@@ -22,7 +22,7 @@ impl Node {
         Node(Rc::new(RefCell::new(node)))
     }
 
-    pub fn add_child(&self, child_node: Node) {
+    pub fn add_child(&self, child_node: &Node) {
         // ミュータブルな参照を得る
         // 'self.0' はタプル構造体の1つめの要素を取得している
         // つまり 'self.0' の型は 'Rc<RefCell<Node<T>>>' だが、
@@ -78,21 +78,8 @@ impl Node {
             return None;
         }
     }
+
+    pub fn has_child_node(&self) -> bool {
+        self.0.borrow().children.len() > 0
+    }
 }
-
-// fn main() {
-//     let root_node = Node::new("S".to_string());
-
-//     let a_node = Node::new("a".to_string());
-//     let b_node = Node::new("b".to_string());
-
-//     root_node.add_child(&a_node);
-//     root_node.add_child(&b_node);
-
-//     root_node.stringify();
-
-//     match root_node.find_node("d") {
-//         Some(node) => println!("FOUND"),
-//         None => println!("NOT FOUND"),
-//     }
-// }

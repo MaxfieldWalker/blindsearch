@@ -1,17 +1,17 @@
 
 pub struct BlindSearchStatus {
-    // ループ回数
-    loop_count: u32,
+    status: String,
+    result: BlindSearchResult,
+}
 
-    // L1 nodes
-    l1: Vec<String>,
-
-    // L2 nodes
-    l2: Vec<String>,
+pub enum SearchResult {
+    Found,
+    NotFound,
 }
 
 pub struct BlindSearchResult {
     statuses: Vec<BlindSearchStatus>,
+    result: SearchResult,
 }
 
 
