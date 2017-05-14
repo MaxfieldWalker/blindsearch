@@ -11,7 +11,6 @@ mod tree;
 mod blindsearch;
 
 use tree::*;
-use dfs::*;
 
 fn capture<'a>(s: &'a String) -> regex::Captures<'a> {
     let pattern = Regex::new(r"([a-zA-Z])\s+->\s+((\*?[a-zA-Z])+)").unwrap();

@@ -19,6 +19,7 @@ pub fn blind_search_dfs(root_node: &Node, goals: &Vec<String>) -> BlindSearchRes
     }
 }
 
+
 fn dig(l1: &mut Vec<Node>,
        l2: &mut Vec<Node>,
        loop_count: u32,
@@ -36,7 +37,7 @@ fn dig(l1: &mut Vec<Node>,
 
         // remove関数を使うことで先頭要素を取り出し，
         // 所有権も配列側から奪うことが出来る
-        let mut first_l1: Node = l1.remove(0);
+        let first_l1: Node = l1.remove(0);
         l2.push(first_l1.ref_clone());
 
         // Step 4:

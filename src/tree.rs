@@ -1,11 +1,8 @@
 use std::rc::Rc;
 use std::cell::RefCell;
-use std::cell::Ref;
-use std::slice::Iter;
-use std::vec::IntoIter;
 use std::fmt;
 
-pub type NodeRef = Rc<RefCell<_Node>>;
+type NodeRef = Rc<RefCell<_Node>>;
 
 #[derive(Debug)]
 struct _Node {
@@ -24,10 +21,6 @@ impl Node {
             children: vec![],
         };
         Node(Rc::new(RefCell::new(node)))
-    }
-
-    pub fn new_from_ref(node_ref: NodeRef) -> Node {
-        Node(node_ref)
     }
 
     pub fn add_child(&self, child_node: &Node) {
