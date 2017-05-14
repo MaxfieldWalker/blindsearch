@@ -12,7 +12,7 @@ pub fn blind_search_iddfs(root_node: &Node,
 
     // Step 1:
     // cutoff の初期値を1とする
-    let mut cutoff: u32 = 1;
+    let cutoff: u32 = 1;
 
     // Step 2'
     // 出発節点をL1に入れる
@@ -22,7 +22,6 @@ pub fn blind_search_iddfs(root_node: &Node,
                        &mut l2,
                        cutoff,
                        cutoff_threshold,
-                       0,
                        0,
                        root_node,
                        goals);
@@ -39,7 +38,6 @@ fn dig(l1: &mut Vec<Node>,
        cutoff: u32,
        cutoff_threshold: u32,
        loop_count: u32,
-       current_depth: u32,
        root_node: &Node,
        goals: &Vec<String>)
        -> Vec<BlindSearchStatus> {
@@ -63,7 +61,6 @@ fn dig(l1: &mut Vec<Node>,
                                       cutoff + 1,
                                       cutoff_threshold,
                                       loop_count + 1,
-                                      0,
                                       root_node,
                                       goals);
             rest_status.insert(0, this_status);
@@ -83,13 +80,6 @@ fn dig(l1: &mut Vec<Node>,
                 // Step 6:
                 // n が展開可能 かつ nの深さが cutoff より小さい場合
                 // n 展開して得られた子接点を順序そのままにL1の先頭に入れる
-                let digin = n.has_child_node() && current_depth < cutoff;
-                let depth = if digin {
-                    current_depth + 1
-                } else {
-                    current_depth
-                };
-
                 let depth = root_node.find_node(&n.name()).unwrap().1 + 1;
 
                 if n.has_child_node() && depth < cutoff {
@@ -105,7 +95,6 @@ fn dig(l1: &mut Vec<Node>,
                                           cutoff,
                                           cutoff_threshold,
                                           loop_count + 1,
-                                          depth,
                                           root_node,
                                           goals);
                 rest_status.insert(0, this_status);
