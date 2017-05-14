@@ -1,14 +1,20 @@
 ## blindsearch
 
+[![Build Status](https://travis-ci.org/MaxfieldWalker/blindsearch.svg?branch=master)](https://travis-ci.org/MaxfieldWalker/blindsearch)
+
+
+
 3種類のブラインド探索
 
-- 縦型探索(深さ優先)
-- 横型探索(幅優先)
-- 反復深化探索(ハイブリッド)
+- 縦型探索(深さ優先) ([ソース](src/dfs.rs))
+- 横型探索(幅優先) ([ソース](src/bfs.rs))
+- 反復深化探索(ハイブリッド) ([ソース](src/iddfs.rs))
+
 
 ## 仕様
 
 - 節点名はアルファベット1文字で`a-zA-Z`である
+
 
 ### 入力仕様
 探索木の表現は以下の通り。
@@ -24,13 +30,4 @@ S -> ab
 a -> cd
 b -> ef
 e -> *gh
-```
-
-### 出力仕様
-出力は以下の通り。
-
-- CSV形式
-```
-loop, L1, L2
-<ループ回数>, <生成された節点のうち，未展開の節点>, <展開済みの節点>
 ```
