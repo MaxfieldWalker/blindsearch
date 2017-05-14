@@ -48,10 +48,10 @@ fn dig(l1: &mut Vec<Node>,
             // Step 5:
             // n が展開できるならば，得られた子接点を順序そのままに
             // L1の先頭に入れる
-
-
             if first_l1.has_child_node() {
-                first_l1.f(l1);
+                for child_node in first_l1.children().iter().rev() {
+                    l1.insert(0, child_node.ref_clone());
+                }
             }
 
             let this_status = BlindSearchStatus::new(str_status, SearchResult::NotFound);

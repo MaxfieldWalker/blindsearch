@@ -80,15 +80,13 @@ impl Node {
         }
     }
 
-    pub fn f(&self, l1: &mut Vec<Node>) {
-        let node_ref = self.0.borrow();
-
-        if !node_ref.children.is_empty() {
-            let children = node_ref.children.iter().rev();
-            for child_ref in children {
-                l1.insert(0, Node(child_ref.clone()));
-            }
-        }
+    pub fn children(&self) -> Vec<Node> {
+        self.0
+            .borrow()
+            .children
+            .iter()
+            .map(|x| Node(x.clone()))
+            .collect()
     }
 
     pub fn name(&self) -> String {
