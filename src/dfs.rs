@@ -12,7 +12,7 @@ pub fn blind_search_dfs(root_node: &Node, goals: &Vec<String>) -> BlindSearchRes
     // Step 1:
     // 出発節点をL1に入れる
     l1.push(root_node.ref_clone());
-    let statuses = dig(&mut l1, &mut l2, 1, goals);
+    let statuses = dig(&mut l1, &mut l2, 0, goals);
     BlindSearchResult {
         statuses: statuses,
         result: SearchResult::Found,
@@ -25,7 +25,7 @@ fn dig(l1: &mut Vec<Node>,
        loop_count: u32,
        goals: &Vec<String>)
        -> Vec<BlindSearchStatus> {
-    let str_status: String = format!("{} | {:?} | {:?}", loop_count, l1, l2);
+    let str_status: String = format!("loop_count: {} L1{:?} L2{:?}", loop_count, l1, l2);
 
     // Step2:
     // L1が空ならば探索失敗，終了

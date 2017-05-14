@@ -1,5 +1,5 @@
+use std::fmt;
 
-#[derive(Debug)]
 pub struct BlindSearchStatus {
     // ループ回数とL1とL2の情報
     status: String,
@@ -23,4 +23,11 @@ pub enum SearchResult {
 pub struct BlindSearchResult {
     pub statuses: Vec<BlindSearchStatus>,
     pub result: SearchResult,
+}
+
+// Node構造体のDebugトレイトの実装
+impl fmt::Debug for BlindSearchStatus {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?} {}", self.result, self.status)
+    }
 }
