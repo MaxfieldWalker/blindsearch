@@ -59,16 +59,20 @@ impl Node {
         }
     }
 
-    pub fn find_node(&self, value: &str) -> Option<Node> {
+    pub fn find_node(&self, value: &str) -> Option<(Node, u32)> {
+        self.inner_find_node(value, 0)
+    }
+
+    fn inner_find_node(&self, value: &str, current_depth: u32) -> Option<(Node, u32)> {
         let node_ref = self.0.borrow();
         if node_ref.value == value {
-            return Some(Node(self.0.clone()));
+            return Some((Node(self.0.clone()), current_depth));
         } else {
             for child_ref in &node_ref.children {
                 let child_node = Node(child_ref.clone());
-                match child_node.find_node(&value) {
-                    Some(node) => {
-                        return Some(node);
+                match child_node.inner_find_node(value, current_depth + 1) {
+                    Some(n) => {
+                        return Some(n);
                     }
                     None => {
                         // 何もしない

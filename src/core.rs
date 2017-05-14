@@ -49,7 +49,7 @@ fn build_tree(line: String, root_node: &Node, goals: &mut Vec<String>) {
     let (node_name, children) = parse_line(&line);
 
     let parent_node: Node = match root_node.find_node(&node_name) {
-        Some(n) => n,
+        Some(x) => x.0,
         None => Node::new(node_name.clone().to_string()),
     };
 
