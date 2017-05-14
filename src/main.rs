@@ -8,6 +8,7 @@ use regex::Regex;
 
 mod dfs;
 mod tree;
+mod blindsearch;
 
 use tree::*;
 use dfs::*;
@@ -102,4 +103,9 @@ fn main() {
     }
 
     root_node.stringify();
+
+    let result = dfs::blind_search_dfs(&root_node, &vec![]);
+    for status in &result.statuses {
+        println!("{:?}", status);
+    }
 }

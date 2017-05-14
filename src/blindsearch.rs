@@ -1,22 +1,26 @@
 
+#[derive(Debug)]
 pub struct BlindSearchStatus {
+    // ループ回数とL1とL2の情報
     status: String,
-    result: BlindSearchResult,
+    // 目標節点が見つかったか見つからなかったか
+    result: SearchResult,
 }
 
+impl BlindSearchStatus {
+    pub fn new(status: String, result: SearchResult) -> BlindSearchStatus {
+        BlindSearchStatus { status, result }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum SearchResult {
     Found,
     NotFound,
 }
 
+#[derive(Debug)]
 pub struct BlindSearchResult {
-    statuses: Vec<BlindSearchStatus>,
-    result: SearchResult,
-}
-
-
-impl BlindSearchStatus {
-    fn to_string(&self) -> String {
-        println!("{} L1: {}, L2: {}", self.loop_count, self.l1, self.l2);
-    }
+    pub statuses: Vec<BlindSearchStatus>,
+    pub result: SearchResult,
 }

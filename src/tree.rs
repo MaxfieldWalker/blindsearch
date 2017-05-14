@@ -1,12 +1,16 @@
 use std::rc::Rc;
 use std::cell::RefCell;
+use std::cell::Ref;
+use std::slice::Iter;
+use std::vec::IntoIter;
+use std::fmt;
 
-type NodeRef = Rc<RefCell<_Node>>;
+pub type NodeRef = Rc<RefCell<_Node>>;
 
 #[derive(Debug)]
 struct _Node {
     value: String,
-    pub children: Vec<NodeRef>,
+    children: Vec<NodeRef>,
 }
 
 // NodeRefは単なるタイプエイリアスなので
@@ -20,6 +24,10 @@ impl Node {
             children: vec![],
         };
         Node(Rc::new(RefCell::new(node)))
+    }
+
+    pub fn new_from_ref(node_ref: NodeRef) -> Node {
+        Node(node_ref)
     }
 
     pub fn add_child(&self, child_node: &Node) {
@@ -79,7 +87,34 @@ impl Node {
         }
     }
 
+    pub fn f(&self, l1: &mut Vec<Node>) {
+        let node_ref = self.0.borrow();
+
+        if !node_ref.children.is_empty() {
+            let children = node_ref.children.iter().rev();
+            for child_ref in children {
+                l1.insert(0, Node(child_ref.clone()));
+            }
+        }
+    }
+
+    pub fn name(&self) -> String {
+        self.0.borrow().value.clone()
+    }
+
     pub fn has_child_node(&self) -> bool {
         self.0.borrow().children.len() > 0
+    }
+
+    pub fn ref_clone(&self) -> Node {
+        Node(self.0.clone())
+    }
+}
+
+// Node構造体のDebugトレイトの実装
+impl fmt::Debug for Node {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let name = self.0.borrow().value.clone();
+        write!(f, "{}", name)
     }
 }
