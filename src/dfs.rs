@@ -1,7 +1,6 @@
 // 縦型探索(深さ優先探索, Depth-First Search)
 
 // mod blindsearch;
-
 use tree::*;
 use blindsearch::*;
 
@@ -64,5 +63,37 @@ fn dig(l1: &mut Vec<Node>,
 
             rest_statuses
         }
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use core;
+
+    #[test]
+    fn test_dfs() {
+        let root_node = core::build_tree_from_input(&"./tests/example.txt".to_string());
+
+        let result = blind_search_dfs(&root_node, &vec![]);
+        let as_str: Vec<String> = result
+            .statuses
+            .iter()
+            .map(|x| format!("{:?}", x))
+            .collect();
+
+        let expected = vec!["NotFound loop_count: 0 L1[S] L2[]",
+                            "NotFound loop_count: 1 L1[a, b] L2[S]",
+                            "NotFound loop_count: 2 L1[c, d, b] L2[S, a]",
+                            "NotFound loop_count: 3 L1[d, b] L2[S, a, c]",
+                            "NotFound loop_count: 4 L1[b] L2[S, a, c, d]",
+                            "NotFound loop_count: 5 L1[e, f] L2[S, a, c, d, b]",
+                            "NotFound loop_count: 6 L1[g, h, f] L2[S, a, c, d, b, e]",
+                            "NotFound loop_count: 7 L1[h, f] L2[S, a, c, d, b, e, g]",
+                            "NotFound loop_count: 8 L1[f] L2[S, a, c, d, b, e, g, h]",
+                            "NotFound loop_count: 9 L1[] L2[S, a, c, d, b, e, g, h, f]"];
+
+        assert_eq!(expected, as_str);
     }
 }
